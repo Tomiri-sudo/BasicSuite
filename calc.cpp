@@ -3,10 +3,18 @@
 
 using namespace std;
 
+// cross-platform compatible system clear
+#ifdef _WIN32
+    #define CLEAR_SCREEN "cls"
+#else
+    #define CLEAR_SCREEN "clear"
+#endif
+
+
 double A, B;
 
 void inputDouble() {
-	system("clear");
+	system(CLEAR_SCREEN);
 	cout << "choose the first number → ";
 	cin >> A;
 	cout << "choose the second number → ";
@@ -14,7 +22,7 @@ void inputDouble() {
 }
 
 void inputSingle() {
-	system("clear");
+	system(CLEAR_SCREEN);
 	cout << "choose a number → ";
         cin >> A;
 }
@@ -66,7 +74,7 @@ double mtan(double num1) {
 int main() {
 	short unsigned int sceltaA, sceltaB;
 
-	system("clear");
+	system(CLEAR_SCREEN);
 	cout << "choose your operation:" << endl;
 	cout << "----------------------" << endl;
 	cout << " 1. A + B             " << endl;
