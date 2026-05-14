@@ -1,6 +1,8 @@
 # BasicSuite
 Basic Programs Suite for Linux and Windows
 
+Please note that all versions before 1.x.x are still considered in development and at the time are still mostly unusable.
+
 ## CHANGELOG!
 ```v0.0.0```<br>
 <ul>
@@ -20,5 +22,11 @@ Basic Programs Suite for Linux and Windows
 ```v0.0.2```
 <ul>
 <li>Calculator now is compatible with Windows.</li>
-<li>Now there is also a counter! That's also cross-platform compatible, and most importantly, it does it's job in a clean way.</li>
+<li>Now there is also a counter! That's also *mostly* cross-platform compatible, and most importantly, it does it's job in a clean way.</li>
+
+</ul>
+
+```v0.0.3```
+<ul>
+<li>Counter now is fully cross-compatible! the issue was that it failed to compile on linux because it tried to import libraries that are only available to Windows.</li>
 </ul>
