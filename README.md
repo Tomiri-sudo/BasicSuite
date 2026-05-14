@@ -20,4 +20,5 @@ Basic Programs Suite for Linux and Windows
 ```v0.0.2```
 <ul>
 <li>Calculator now is compatible with Windows.</li>
+<li>Now there is also a counter! That's also cross-platform compatible, and most importantly, it does it's job in a clean way</li>
 </ul>
