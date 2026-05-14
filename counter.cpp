@@ -1,6 +1,13 @@
 #include <iostream>
 #include <string>
-#include <conio.h> //write input easily (no pressing enter required)
+
+#ifdef _WIN32
+    #include <conio.h> // write input easily (no pressing enter required)
+#else
+    #include <termios.h>
+    #include <unistd.h>
+#endif
+
 using namespace std;
 
 // cross-platform compatible system clear (same as in calculator)
@@ -10,14 +17,30 @@ using namespace std;
     #define CLEAR_SCREEN "clear"
 #endif
 
-
-//now a cross-platform compatible system pause
-
+// cross-platform compatible system pause
 #ifdef _WIN32
     #define PAUSE "PAUSE"
 #else
     #define prompt "Press Enter to continue..."
     #define PAUSE "read -p prompt"
+#endif
+
+// cross-platform getch() function
+#ifdef _WIN32
+    #define GETCH _getch
+#else
+    int getch() {
+        struct termios oldt, newt;
+        int ch;
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        ch = getchar();
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        return ch;
+    }
+    #define GETCH getch
 #endif
 
 int main() {
@@ -31,7 +54,7 @@ int main() {
         cout << " '+' to increase count" << endl;
         cout << " '-' to decrease count" << endl;
         cout << "      'c' to exit" << endl;
-        choice = _getch();
+        choice = GETCH();
 
         //check user response
         switch (choice) {
