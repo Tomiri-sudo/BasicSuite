@@ -34,5 +34,8 @@ Please note that all versions before 1.x.x are still considered in development a
 
 ```v0.0.4```
 <ul>
-  <li>Counter on Android now makes device vibrate when any of the buttons is clicked (UX improvement)</li>
+  <li>Counter on Android now makes device vibrate when any of the buttons is clicked. (UX improvement)</li>
+  <li>Now Counter has a Settings screen from which one can choose whether to use vibration or not, and set the step count to either 1, 2, 5 and 10.</li>
+  <li>The buttons in Counter to add or subtract to or from the count now do update accordingly to the increment (example: "+" → "+1")</li>
+  <li>In Counter now there is another text saying the increment.</li>
 </ul>
