@@ -1,0 +1,56 @@
+name: Extract 7z Archives
+
+on:
+  push:
+    paths:
+      - '**.7z'
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install 7zip
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+      
+      - name: Extract 7z files and commit
+        run: |
+          for file in *.7z; do
+            if [ -f "$file" ]; then
+              echo "Extracting $file..."
+              # Get filename without extension
+              folder_name="${file%.7z}"
+              # Extract to folder named after the archive
+              7z x "$file" -o"$folder_name" -y
+              echo "Extracted to folder: $folder_name"
+            fi
+          done
+      
+      - name: Commit extracted files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-extract 7z archives"
+            git push
+          fi
+      
+      - name: Create summary
+        run: |
+          echo "## 7z Extraction Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Extracted files have been committed to the repository:" >> $GITHUB_STEP_SUMMARY
+          find . -type d -maxdepth 1 | grep -v '^\.$' | grep -v '^\./\.' | while read dir; do
+            if [ -d "$dir" ]; then
+              echo "- 📁 $(basename $dir)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
