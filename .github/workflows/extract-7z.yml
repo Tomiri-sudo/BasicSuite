@@ -30,11 +30,12 @@ jobs:
               find "$folder_name" -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true
             fi
           done
+          rm *.7z
       
       - name: Commit extracted files
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.name "GitHub Unzipper Action"
           git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
