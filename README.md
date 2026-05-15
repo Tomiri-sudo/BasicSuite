@@ -31,3 +31,8 @@ Please note that all versions before 1.x.x are still considered in development a
 <li>Counter now is fully cross-compatible! the issue was that it failed to compile on linux because it tried to import libraries that are only available to Windows.</li>
 <li>Now Counter has come to Android! While still pretty basic, it has dynamic theming, it can increase, decrease or reset your count, and it saves the count in memory so if you delete the cache or reboot, it won't delete your count.</li>
 </ul>
+
+```v0.0.4```
+<ul>
+  <li>Counter on Android now makes device vibrate when any of the buttons is clicked (UX improvement)</li>
+</ul>
