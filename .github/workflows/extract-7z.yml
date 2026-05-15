@@ -22,11 +22,12 @@ jobs:
           for file in *.7z; do
             if [ -f "$file" ]; then
               echo "Extracting $file..."
-              # Get filename without extension
               folder_name="${file%.7z}"
-              # Extract to folder named after the archive
               7z x "$file" -o"$folder_name" -y
               echo "Extracted to folder: $folder_name"
+              
+              # Remove any embedded git repositories
+              find "$folder_name" -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true
             fi
           done
       
@@ -35,7 +36,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          # Check if there are changes to commit
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
@@ -53,4 +53,3 @@ jobs:
               echo "- 📁 $(basename $dir)" >> $GITHUB_STEP_SUMMARY
             fi
           done
-          
