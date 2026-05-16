@@ -2,65 +2,95 @@
 #include <fstream>
 #include <string>
 #include <sys/stat.h>
+
+// Windows-specific header for enabling ANSI colors
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 
 using namespace std;
+
+// --- COLOR DEFINITIONS ---
+const string RESET   = "\033[0m";
+const string RED     = "\033[31m";
+const string GREEN   = "\033[32m";
+const string YELLOW  = "\033[33m";
+const string BLUE    = "\033[34m";
+const string CYAN    = "\033[36m";
+const string BOLD    = "\033[1m";
 
 inline bool fileExists (const std::string& name) {
   struct stat buffer;
   return (stat (name.c_str(), &buffer) == 0);
 }
 
+// Function to enable ANSI escape codes on Windows
+void enableANSIColors() {
+#ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) return;
+
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode)) return;
+
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+#endif
+}
+
 int main() {
+    // Magic step to make colors work seamlessly on Windows
+    enableANSIColors();
+
     string newContactName, newContactEmail, contactCountStr;
     int contactCount = 0;
     char choice;
 
-    cout << "Welcome to your contacts book!\n";
-    cout << "Choose your operation:\n -> '1' to Create New Contact\n -> '2' to List All Contacts\n";
+    // Added bold and cyan to the welcome message
+    cout << BOLD << CYAN << "Welcome to your contacts book!\n" << RESET;
+    cout << "Choose your operation:\n -> '1' to " << GREEN << "Create New Contact" << RESET << "\n -> '2' to " << BLUE << "List All Contacts" << RESET << "\n";
     cin >> choice;
-    cin.ignore(); // Clears the newline character after cin >> choice
+    cin.ignore(); 
 
     switch (choice) {
         case '1': {
-            //check if file actually exists
             ifstream countReader("contact_count.txt");
             if (!countReader) {
-                // File doesn't exist, so let's assume count is 0
                 contactCount = 0;
             } else {
                 countReader >> contactCount;
                 countReader.close();
             }
 
-            // 2. Get User Input
             cout << "Enter contact name: ";
-            getline(cin, newContactName); // Allows spaces in names
+            getline(cin, newContactName); 
             cout << "Enter e-mail address: ";
             getline(cin, newContactEmail);
 
-            // 3. Increment and save new count
             contactCount++;
             ofstream countWriter("contact_count.txt");
             countWriter << contactCount;
             countWriter.close();
 
-            // 4. Create the contact file (e.g., "1.txt", "2.txt")
             string fileName = to_string(contactCount) + ".txt";
             ofstream contactFile(fileName);
             contactFile << "Name: " << newContactName << "\n";
             contactFile << "Email: " << newContactEmail << "\n";
             contactFile.close();
 
-
-            cout << "Contact saved as " << fileName << endl;
+            // Success message in green
+            cout << GREEN << "✔ Contact saved as " << fileName << RESET << endl;
             break;
         }
         case '2':
-            cout << "List functionality coming soon!" << endl;
+            // Info message in yellow
+            cout << YELLOW << "ℹ List functionality coming soon!" << RESET << endl;
             break;
         default:
-            cout << "Invalid choice." << endl;
+            // Error message in red
+            cout << RED << "✖ Invalid choice." << RESET << endl;
     }
 
     return 0;

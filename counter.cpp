@@ -3,6 +3,7 @@
 
 #ifdef _WIN32
     #include <conio.h> // write input easily (no pressing enter required)
+    #include <windows.h> // Needed for Windows ANSI activation
 #else
     #include <termios.h>
     #include <unistd.h>
@@ -10,7 +11,25 @@
 
 using namespace std;
 
-// cross-platform compatible system clear (same as in calculator)
+// --- CROSS-PLATFORM COLOR CONFIG ---
+const string RESET   = "\033[0m";
+const string GREEN   = "\033[32m";
+const string YELLOW  = "\033[33m";
+const string CYAN    = "\033[36m";
+const string BOLD    = "\033[1m";
+
+void enableANSIColors() {
+#ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) return;
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode)) return;
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+#endif
+}
+
+// cross-platform compatible system clear
 #ifdef _WIN32
     #define CLEAR_SCREEN "cls"
 #else
@@ -44,15 +63,18 @@ using namespace std;
 #endif
 
 int main() {
+    enableANSIColors(); // Activate Windows terminal color processing
+
     double count = 0;
-    char choice;
+    char choice = 0; // Fixed: uninitialized choice variable
+
     while (choice != 'c') {
         system(CLEAR_SCREEN);
-        cout << "-----------------------" << endl;
-        cout << count << endl << endl;
-        cout << "-----------------------" << endl;
-        cout << " '+' to increase count" << endl;
-        cout << " '-' to decrease count" << endl;
+        cout << CYAN << "-----------------------" << RESET << endl;
+        cout << BOLD << YELLOW << " " << count << RESET << endl << endl;
+        cout << CYAN << "-----------------------" << RESET << endl;
+        cout << " '" << GREEN << "+" << RESET << "' to increase count" << endl;
+        cout << " '" << YELLOW << "-" << RESET << "' to decrease count" << endl;
         cout << "      'c' to exit" << endl;
         choice = GETCH();
 
