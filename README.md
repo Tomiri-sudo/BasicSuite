@@ -44,4 +44,5 @@ Please note that all versions before 1.x.x are still considered in development a
 <ul>
   <li>Now there's a Contacts book! it is real basic.</li>
   <li>Now all outputs are colored, effective only for console based programs.</li>
+  <li>Fixed a bug in the Contacts console app that, when manually changing the text file that keeps count of the amount of contacts and then running the program trying to create new contacts, it would overwrite the previously saved ones.</li>
 </ul>
