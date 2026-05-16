@@ -40,11 +40,27 @@ void enableANSIColors() {
 #endif
 }
 
+void printContactFile(int index) {
+    string fileName = to_string(index) + ".txt";
+    ifstream file(fileName);
+    
+    if (file.is_open()) {
+        string line;
+        cout << CYAN << "--- Contact #" << index << " ---" << RESET << endl;
+        while (getline(file, line)) {
+            cout << line << endl;
+        }
+        cout << endl;
+        file.close();
+    }
+}
+
+
 int main() {
     // Magic step to make colors work seamlessly on Windows
     enableANSIColors();
 
-    string newContactName, newContactEmail, contactCountStr;
+    string newContactName, newContactEmail, newContactPhoneNumber, contactCountStr;
     int contactCount = 0;
     char choice;
 
@@ -66,28 +82,61 @@ int main() {
 
             cout << "Enter contact name: ";
             getline(cin, newContactName); 
+	    cout << "Enter contact phone number: ";
+            getline(cin, newContactPhoneNumber);
             cout << "Enter e-mail address: ";
             getline(cin, newContactEmail);
 
             contactCount++;
+            // 3. Increment and save new count
+            contactCount++;
+            
+            // Loop forward if a file with this number somehow already exists
+            // This prevents accidentally overwriting old data!
+            while (fileExists(to_string(contactCount) + ".txt")) {
+                contactCount++;
+            }
+
             ofstream countWriter("contact_count.txt");
             countWriter << contactCount;
             countWriter.close();
 
+            // 4. Create the unique contact file safely
             string fileName = to_string(contactCount) + ".txt";
             ofstream contactFile(fileName);
             contactFile << "Name: " << newContactName << "\n";
+            contactFile << "Phone: " << newContactPhoneNumber << "\n";
             contactFile << "Email: " << newContactEmail << "\n";
             contactFile.close();
 
             // Success message in green
-            cout << GREEN << "✔ Contact saved as " << fileName << RESET << endl;
+            cout << GREEN << "✔ Saved " << newContactName << " to your contacts!" << RESET << endl;
             break;
         }
-        case '2':
-            // Info message in yellow
-            cout << YELLOW << "ℹ List functionality coming soon!" << RESET << endl;
+        case '2': {
+            int totalContacts = 0;
+            ifstream countReader("contact_count.txt");
+            
+            // Try to read how many contacts we have total
+            if (countReader) {
+                countReader >> totalContacts;
+                countReader.close();
+            }
+
+            // If the file doesn't exist or count is 0
+            if (totalContacts == 0) {
+                cout << YELLOW << "ℹ Your contacts book is empty!" << RESET << endl;
+            } else {
+                cout << BOLD << GREEN << "\nShowing " << totalContacts << " contact(s):\n" << RESET << endl;
+                
+                // Loop through from 1 to the exact count of contacts
+                for (int i = 1; i <= totalContacts; i++) {
+                    printContactFile(i);
+                }
+            }
             break;
+        }
+
         default:
             // Error message in red
             cout << RED << "✖ Invalid choice." << RESET << endl;
