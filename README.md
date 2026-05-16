@@ -39,3 +39,8 @@ Please note that all versions before 1.x.x are still considered in development a
   <li>The buttons in Counter to add or subtract to or from the count now do update accordingly to the increment (example: "+" → "+1")</li>
   <li>In Counter now there is another text saying the increment.</li>
 </ul>
+
+```v0.0.5```
+<ul>
+  <li>Now there's a Contacts book! it is real basic.</li>
+</ul>
