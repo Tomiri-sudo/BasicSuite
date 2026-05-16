@@ -40,7 +40,8 @@ Please note that all versions before 1.x.x are still considered in development a
   <li>In Counter now there is another text saying the increment.</li>
 </ul>
 
-```v0.0.5```
+```v0.0.5``` <b>The Color Update</b>
 <ul>
   <li>Now there's a Contacts book! it is real basic.</li>
+  <li>Now all outputs are colored, effective only for console based programs.</li>
 </ul>
